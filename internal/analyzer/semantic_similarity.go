@@ -455,6 +455,18 @@ func (s *SemanticSimilarityAnalyzer) GetName() string {
 	return "semantic"
 }
 
+// ComputeDistance computes the semantic distance between two code fragments.
+// Returns 1 - similarity.
+func (s *SemanticSimilarityAnalyzer) ComputeDistance(f1, f2 *CodeFragment) float64 {
+	return 1.0 - s.ComputeSimilarity(f1, f2)
+}
+
+// ComputeDistanceAndSimilarity computes both distance and similarity in one call.
+func (s *SemanticSimilarityAnalyzer) ComputeDistanceAndSimilarity(f1, f2 *CodeFragment) (float64, float64) {
+	similarity := s.ComputeSimilarity(f1, f2)
+	return 1.0 - similarity, similarity
+}
+
 // BuildCFG builds a CFG from a parser.Node (exposed for testing)
 func (s *SemanticSimilarityAnalyzer) BuildCFG(node *parser.Node) (*CFG, error) {
 	builder := NewCFGBuilder()

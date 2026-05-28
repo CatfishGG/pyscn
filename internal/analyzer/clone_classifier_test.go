@@ -205,7 +205,7 @@ func TestSyntacticSimilarityAnalyzer(t *testing.T) {
 		PrepareTreeForAPTED(f2.TreeNode)
 
 		similarity := analyzer.ComputeSimilarity(f1, f2)
-		// Type-2 clones should have high similarity (>= 0.80)
+		// Type-2 clones should have high similarity (>= 0.80, nil)
 		assert.GreaterOrEqual(t, similarity, 0.80,
 			"Type-2 clones (renamed identifiers/literals) should have high similarity")
 	})
@@ -286,7 +286,7 @@ func TestSyntacticSimilarityAnalyzer(t *testing.T) {
 		PrepareTreeForAPTED(f2.TreeNode)
 
 		similarity := analyzer.ComputeSimilarity(f1, f2)
-		// Different structures should have low similarity (< 0.50)
+		// Different structures should have low similarity (< 0.50, nil)
 		assert.Less(t, similarity, 0.50,
 			"Structurally different code should have low similarity")
 	})
@@ -822,7 +822,7 @@ class ProductInventory:
 			// Check that raw APTED similarity is not perfect (1.0)
 			// With relaxed thresholds, framework boilerplate may exceed type thresholds
 			// but should still show structural differences (similarity < 0.95)
-			similarity := detector.analyzer.ComputeSimilarity(class1.TreeNode, class2.TreeNode)
+			similarity := detector.analyzer.ComputeSimilarity(class1, class2)
 			assert.Less(t, similarity, 0.95,
 				"Different dataclasses should have noticeably different structure (issue #310)")
 		}
@@ -892,7 +892,7 @@ class ProductInventory:
 			// Check that raw APTED similarity is not perfect (1.0)
 			// With relaxed thresholds, framework boilerplate may exceed type thresholds
 			// but should still show structural differences (similarity < 0.95)
-			similarity := detector.analyzer.ComputeSimilarity(class1.TreeNode, class2.TreeNode)
+			similarity := detector.analyzer.ComputeSimilarity(class1, class2)
 			assert.Less(t, similarity, 0.95,
 				"Different Pydantic models should have noticeably different structure (issue #310)")
 		}
@@ -969,8 +969,8 @@ class UserMetricsV2:
 		}
 
 		if method1 != nil && method2 != nil {
-			similarity := detector.analyzer.ComputeSimilarity(method1.TreeNode, method2.TreeNode)
-			// These identical methods SHOULD be detected as clones (Type-2 at minimum)
+			similarity := detector.analyzer.ComputeSimilarity(method1, method2)
+			// These identical methods SHOULD be detected as clones (Type-2 at minimum, nil)
 			assert.GreaterOrEqual(t, similarity, domain.DefaultType3CloneThreshold,
 				"Identical methods within dataclasses SHOULD be detected as clones")
 		}

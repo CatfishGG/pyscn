@@ -6,6 +6,15 @@ type SimilarityAnalyzer interface {
 	// ComputeSimilarity returns a similarity score between 0.0 and 1.0
 	ComputeSimilarity(fragment1, fragment2 *CodeFragment) float64
 
+	// ComputeDistance computes the tree edit distance between two fragments.
+	// This is used by CloneDetector for scoring clone pairs.
+	ComputeDistance(fragment1, fragment2 *CodeFragment) float64
+
+	// ComputeDistanceAndSimilarity computes both distance and similarity in a single
+	// traversal, which is more efficient than calling ComputeDistance and
+	// ComputeSimilarity separately when both values are needed.
+	ComputeDistanceAndSimilarity(fragment1, fragment2 *CodeFragment) (float64, float64)
+
 	// GetName returns the name of this analyzer
 	GetName() string
 }
